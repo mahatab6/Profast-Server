@@ -1,7 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 
 
 const app = express();
@@ -46,6 +46,12 @@ async function run() {
       res.send(result);
     })
 
+    app.delete('/parcel-delete/:id', async (req, res)=>{
+      const id = req.params.id;
+      const result = await parcelCollection.deleteOne({ _id: new ObjectId(id)});
+      res.send(result)
+    })
+
     // user parcel get on database
 
     app.get('/parcels-info', async(req, res) =>{
@@ -60,9 +66,6 @@ async function run() {
         .toArray();
       res.send(parcels)
     })
-
-
-
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
