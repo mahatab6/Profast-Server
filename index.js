@@ -46,6 +46,21 @@ async function run() {
       res.send(result);
     })
 
+    // user parcel get on database
+
+    app.get('/parcels-info', async(req, res) =>{
+      const email = req.query.email;
+      console.log( typeof email)
+      if(!email){
+        return res.status(400).send({ error: 'Email query is required.' });
+      }
+      const parcels = await parcelCollection
+        .find({ senderEmail: email})
+        .sort({ createdAt: -1 })
+        .toArray();
+      res.send(parcels)
+    })
+
 
 
 
